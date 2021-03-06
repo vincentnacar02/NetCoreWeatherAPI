@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NetCoreWeatherAPI.Commands;
 using NetCoreWeatherAPI.Handlers;
 
 namespace NetCoreWeatherAPI.Controllers
@@ -23,7 +24,7 @@ namespace NetCoreWeatherAPI.Controllers
         [HttpGet, Route("{city}")]
         public async Task<IActionResult> Get([FromRoute] String city)
         {
-            var query = new GetWeather.Query
+            var query = new GetWeatherCommand
             {
                 City = city
             };

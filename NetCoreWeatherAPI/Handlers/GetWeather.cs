@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using NetCoreWeatherAPI.Commands;
+using NetCoreWeatherAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,30 +16,12 @@ namespace NetCoreWeatherAPI.Handlers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public class Query : IRequest<Result>
+        public class GetWeatherHandler : IRequestHandler<GetWeatherCommand, Weather>
         {
-            public String City { get; set; }
-        }
-
-        public class Result
-        {
-            public String City { get; set; }
-
-            public DateTime Date { get; set; }
-
-            public int TemperatureC { get; set; }
-
-            public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-            public string Summary { get; set; }
-        }
-
-        public class GetWeatherHandler : IRequestHandler<Query, Result>
-        {
-            public Task<Result> Handle(Query request, CancellationToken cancellationToken)
+            public Task<Weather> Handle(GetWeatherCommand request, CancellationToken cancellationToken)
             {
                 var rng = new Random();
-                return Task.FromResult(new Result
+                return Task.FromResult(new Weather
                 {
                     City = request.City,
                     Date = DateTime.Now,

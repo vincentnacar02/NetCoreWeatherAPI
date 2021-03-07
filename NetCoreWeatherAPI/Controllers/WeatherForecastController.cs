@@ -21,10 +21,10 @@ namespace NetCoreWeatherAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet, Route("{city}")]
+        [HttpGet, Route("{city?}")]
         public async Task<IActionResult> Get([FromRoute] String city)
         {
-            var query = new GetWeatherCommand
+            var query = new GetWeatherQuery
             {
                 City = city
             };

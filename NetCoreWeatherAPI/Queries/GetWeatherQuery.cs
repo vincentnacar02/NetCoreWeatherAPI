@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetCoreWeatherAPI.Commands
 {
-    public class GetWeatherCommand : IRequest<Weather>
+    public class GetWeatherQuery : IRequest<Weather>
     {
         public String City { get; set; }
     }

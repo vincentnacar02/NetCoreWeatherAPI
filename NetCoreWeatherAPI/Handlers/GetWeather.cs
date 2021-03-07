@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using NetCoreWeatherAPI.Commands;
 using NetCoreWeatherAPI.Models;
 using System;
@@ -16,10 +17,25 @@ namespace NetCoreWeatherAPI.Handlers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public class GetWeatherHandler : IRequestHandler<GetWeatherCommand, Weather>
+        public class GetWeatherHandler : IRequestHandler<GetWeatherQuery, Weather>
         {
-            public Task<Weather> Handle(GetWeatherCommand request, CancellationToken cancellationToken)
+            private readonly IValidatorFactory _validationFactory;
+
+            public GetWeatherHandler(IValidatorFactory validationFactory)
             {
+                _validationFactory = validationFactory;
+            }
+
+            public Task<Weather> Handle(GetWeatherQuery request, CancellationToken cancellationToken)
+            {
+                var validator = _validationFactory.GetValidator<GetWeatherQuery>();
+
+                var result = validator.Validate(request);
+                if (result != null && !result.IsValid)
+                {
+                    throw new ValidationException(result.Errors);
+                }
+
                 var rng = new Random();
                 return Task.FromResult(new Weather
                 {
